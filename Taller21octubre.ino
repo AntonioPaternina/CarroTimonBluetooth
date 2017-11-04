@@ -35,28 +35,26 @@ void loop() {
 }
 
 int getPWMAfromByte(int input) {
-  if (input == 255) {
-    return 0;
+  // si el timón está girado hacia la izquierda
+  if (input <= 127) {
+    return 255; // maxima velocidad
   }
-  if (input == 127) {
-    return 255;
-  } else if (input < 127) {
-    return 255;
-  } else {
-    return (((input - 127) / 127) * 255);
+  else {
+    // si el timón está girado hacia la derecha es necesario retrasar PWMA
+    // si input == 128 entonces se disminuye a 253 el PWMA, si el input == 255 se disminuye a 0 el PWMA
+    return 255 - ((input - 127.0) / 128) * 255;
   }
 }
 
 int getPWMBfromByte(int input) {
-  if (input == 255) {
-    return 0;
+  // si el timón está girado hacia la derecha
+  if (input >= 127) {
+    return 255; // maxima velocidad
   }
-   if (input == 127) {
-    return 255;
-  } else if (input < 127) {
-    return ((-(input - 127) / 127) * 255);
-  } else {
-    return 255;
+  else {
+    // si el timón está girado hacia la izquierda es necesario retrasar PWMB
+    // si input == 126 entonces se disminuye a 253 el PWMB, si el input == 255 se disminuye a 0 el PWMB
+    return 255 - ((127.0 - input) / 127) * 255;
   }
 }
 
